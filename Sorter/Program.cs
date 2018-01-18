@@ -72,6 +72,7 @@ namespace Sorter
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine("test");
                     Console.WriteLine(e);
                     Thread.Sleep(5000);
                 }
