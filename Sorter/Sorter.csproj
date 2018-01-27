@@ -158,7 +158,7 @@
     <Compile Include="Modules\Admin\Clean.cs" />
     <Compile Include="Modules\Announcement\AnnouncementModule.cs" />
     <Compile Include="Modules\Logging\Logging.cs" />
-    <Compile Include="Modules\Ping.cs" />
+    <Compile Include="Modules\Ping\Ping.cs" />
     <Compile Include="Modules\User\UserJoinedModule.cs" />
     <Compile Include="Modules\User\UserLeftModule.cs" />
     <Compile Include="Modules\User\UserModule.cs" />

@@ -8,7 +8,13 @@ namespace Sorter.Modules
         [Command("ping")]
         public async Task PingAsync()
         {
-            await ReplyAsync("Hello world");
+            await ReplyAsync("Pong");
+        }
+
+        [Command("beep")]
+        public async Task beepAsync()
+        {
+            await ReplyAsync("Boop");
         }
     }
 }
