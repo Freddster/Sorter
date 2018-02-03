@@ -16,7 +16,7 @@ namespace Sorter.Modules
     [Group("logging"), RequireUserPermission(ChannelPermission.ManageChannel)]
     public class Logging : ModuleBase<SocketCommandContext>
     {
-        [Command("set")]
+        [Command("setChannel")]
         public Task SetLoggingChannel()
         {
             var channelId = Context.Message.Channel.Id;
@@ -28,16 +28,12 @@ namespace Sorter.Modules
         [Command("remove")]
         public Task RemoveLoggingChannel()
         {
-            var channelId = Context.Message.Channel.Id;
-            var guildId = Context.Guild.Id;
-
             UnitOfWork unitOfWork = new UnitOfWork();
-            var model = unitOfWork.LoggingChannelRepository.GetLoggingChannelId(Convert.ToString(guildId)).Result;
+            var model = unitOfWork.LoggingChannelRepository.GetLoggingChannelId(Convert.ToString(Context.Guild.Id)).Result;
             if (model != null)
             {
                 unitOfWork.LoggingChannelRepository.Remove(model);
-
-                var socketChannel = Context.Channel as SocketGuildChannel;
+                unitOfWork.Save();
 
                 AdminModule.CleanModule.DeleteCommand(Context.Channel);
             }

@@ -8,10 +8,11 @@ using Discord.WebSocket;
 using Sorter.DataAccessLogic;
 using Sorter.DataAccessLogic.Repositories;
 using Sorter.Models;
+using Sorter.Modules.Admin;
 
 namespace Sorter.Modules.Announcement
 {
-    [Group("announcement"), RequireUserPermission(ChannelPermission.ManageMessages)]
+    [Group("announcement"), RequireUserPermission(ChannelPermission.ManageMessages), RequireUserPermission(ChannelPermission.ManageChannel)]
     public class AnnouncementModule : ModuleBase<SocketCommandContext>
     {
         public static async void SaveAnnouncementChannelId(ulong id, ulong guildId)
@@ -43,6 +44,22 @@ namespace Sorter.Modules.Announcement
             var channelId = Context.Message.Channel.Id;
             var guildId = Context.Guild.Id;
             SaveAnnouncementChannelId(channelId, guildId);
+            return Task.CompletedTask;
+        }
+
+        [Command("remove")]
+        public Task RemoveAnnouncementId()
+        {
+            UnitOfWork unitOfWork = new UnitOfWork();
+            var announcementChannelId = unitOfWork.AnnouncementChannelRepository.GetAnnouncementChannelId(Context.Guild.Id.ToString()).Result;
+            if(announcementChannelId != null)
+            {
+                unitOfWork.AnnouncementChannelRepository.Remove(announcementChannelId);
+                unitOfWork.Save();
+
+                AdminModule.CleanModule.DeleteCommand(Context.Channel);
+            }
+
             return Task.CompletedTask;
         }
 

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Discord.Commands;
 
-namespace Sorter.Modules
+namespace Sorter.Modules.Ping
 {
     public class Ping : ModuleBase<SocketCommandContext>
     {
