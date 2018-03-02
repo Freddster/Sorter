@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
+using Discord.Net.Providers.WS4Net;
 using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Sorter.DataAccessLogic;
@@ -31,22 +32,37 @@ namespace Sorter
         //TODO: Move bot program to bot file
         private Program()
         {
-            CultureInfo newCulture = CultureInfo.CreateSpecificCulture("en-US");
-            _client = new DiscordSocketClient(new DiscordSocketConfig
+            Version operatingSystemVersion = Environment.OSVersion.Version;
+            int major = operatingSystemVersion.Major;
+            var minor = operatingSystemVersion.Minor;
+            if (major >= 6 && (minor == 2 || minor == 3 || minor == 0))
             {
-                // How much logging do you want to see?
-                LogLevel = LogSeverity.Info,
+                _client = new DiscordSocketClient(new DiscordSocketConfig
+                {
+                    // How much logging do you want to see?
+                    LogLevel = LogSeverity.Info,
 
-                // If you or another service needs to do anything with messages
-                // (eg. checking Reactions, checking the content of edited/deleted messages),
-                // you must set the MessageCacheSize. You may adjust the number as needed.
-                //MessageCacheSize = 50,
+                    // If you or another service needs to do anything with messages
+                    // (eg. checking Reactions, checking the content of edited/deleted messages),
+                    // you must set the MessageCacheSize. You may adjust the number as needed.
+                    //MessageCacheSize = 50,
 
-                // If your platform doesn't have native websockets,
-                // add Discord.Net.Providers.WS4Net from NuGet,
-                // add the `using` at the top, and uncomment this line:
-                //WebSocketProvider = WS4NetProvider.Instance
-            });
+                    // If your platform doesn't have native websockets,
+                    // add Discord.Net.Providers.WS4Net from NuGet,
+                    // add the `using` at the top, and uncomment this line:
+                    //WebSocketProvider = WS4NetProvider.Instance
+                });
+            }
+            else
+            {
+                _client = new DiscordSocketClient(new DiscordSocketConfig()
+                {
+                    LogLevel = LogSeverity.Info,
+                    WebSocketProvider = WS4NetProvider.Instance
+                });
+            }
+
+            CultureInfo newCulture = CultureInfo.CreateSpecificCulture("en-US");
             // Subscribe the logging handler to both the client and the CommandService.
             _client.Log += Logger;
             _commands.Log += Logger;

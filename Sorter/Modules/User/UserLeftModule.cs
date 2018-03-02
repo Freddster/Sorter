@@ -48,6 +48,7 @@ namespace Sorter.Modules.User
                     }
                 }
             }
+            Logging.LogUserLeftChannel(voiceChannel.Guild, user, voiceChannel.Name);
         }
     }
 }

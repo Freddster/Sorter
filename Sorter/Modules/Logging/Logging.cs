@@ -76,7 +76,6 @@ namespace Sorter.Modules
                 if (socketTextChannel != null)
                 {
                     await socketTextChannel.SendMessageAsync($"**{nickname}** _joined_ channel **{channelName}**");
-
                 }
             }
         }
